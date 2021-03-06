@@ -3,8 +3,8 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Spark1",
-				"type": "HDInsightSpark",
+				"name": "Notebook1",
+				"type": "DatabricksNotebook",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "7.00:00:00",
@@ -15,21 +15,27 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"rootPath": "adftutorial/spark/script",
-					"entryFilePath": "WordCount_Spark.py",
-					"sparkJobLinkedService": {
-						"referenceName": "Hdinsightadlsg2",
-						"type": "LinkedServiceReference"
+					"notebookPath": "/folder1/notebooktrig",
+					"baseParameters": {
+						"input": {
+							"value": "@pipeline().parameters.name1",
+							"type": "Expression"
+						}
 					}
 				},
 				"linkedServiceName": {
-					"referenceName": "AzureHDInsightLinkedService",
+					"referenceName": "AzureDatabricks1",
 					"type": "LinkedServiceReference"
 				}
 			}
 		],
+		"parameters": {
+			"name1": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
-		"lastPublishTime": "2020-12-29T06:47:09Z"
+		"lastPublishTime": "2021-03-06T06:00:19Z"
 	},
 	"type": "Microsoft.DataFactory/factories/pipelines"
 }

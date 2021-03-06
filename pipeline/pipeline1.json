@@ -28,7 +28,8 @@
 					"sink": {
 						"type": "DelimitedTextSink",
 						"storeSettings": {
-							"type": "AzureBlobFSWriteSettings"
+							"type": "AzureBlobFSWriteSettings",
+							"copyBehavior": "MergeFiles"
 						},
 						"formatSettings": {
 							"type": "DelimitedTextWriteSettings",
@@ -48,7 +49,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "http",
+						"referenceName": "httpserver",
 						"type": "DatasetReference"
 					}
 				],
@@ -60,7 +61,7 @@
 				]
 			},
 			{
-				"name": "dataflow1",
+				"name": "Data flow1",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
@@ -85,7 +86,7 @@
 					},
 					"staging": {
 						"linkedService": {
-							"referenceName": "AzureStorageLinkedService",
+							"referenceName": "AzureDataLakeStorage1",
 							"type": "LinkedServiceReference"
 						},
 						"folderPath": "data/staging"
@@ -99,7 +100,7 @@
 			}
 		],
 		"annotations": [],
-		"lastPublishTime": "2020-12-28T11:41:49Z"
+		"lastPublishTime": "2021-03-05T07:00:42Z"
 	},
 	"type": "Microsoft.DataFactory/factories/pipelines"
 }
