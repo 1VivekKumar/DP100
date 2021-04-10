@@ -10,7 +10,7 @@
 		"schema": [],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "Ratingsmoveie"
+			"table": "ratings"
 		}
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"
