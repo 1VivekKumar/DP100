@@ -1,0 +1,87 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "datafactoryvkvkv1"
+		},
+		"AzureBlobStorage1_connectionString": {
+			"value": ""
+		},
+		"AzureBlobStorage2_connectionString": {
+			"value": ""
+		},
+		"AzureDataLakeStorage1_accountKey": {
+			"value": ""
+		},
+		"AzureDatabricks1_accessToken": {
+			"value": ""
+		},
+		"AzureDatabricks2_accessToken": {
+			"value": ""
+		},
+		"AzureDatabricks3_accessToken": {
+			"value": ""
+		},
+		"AzureDatabricks4_accessToken": {
+			"value": ""
+		},
+		"AzureHDInsightLinkedService_password": {
+			"value": ""
+		},
+		"AzureSQLDatabaseLinkedService_connectionString": {
+			"value": ""
+		},
+		"AzureStorageLinkedService_connectionString": {
+			"value": ""
+		},
+		"AzureSynapseAnalytics1_connectionString": {
+			"value": ""
+		},
+		"Hdinsightadlsg2_connectionString": {
+			"value": ""
+		},
+		"linkedService1_connectionString": {
+			"value": ""
+		},
+		"linkedService2_clusterPassword": {
+			"value": ""
+		},
+		"linkedService2_clusterSshPassword": {
+			"value": ""
+		},
+		"linkedService2_servicePrincipalKey": {
+			"value": ""
+		},
+		"SinkDataset_properties_typeProperties_fileName": {
+			"value": "@CONCAT('Incremental-', pipeline().RunId, '.txt')"
+		},
+		"SinkDataset_properties_typeProperties_folderPath": {
+			"value": "adftutorial/incrementalcopy"
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"value": "https://storageaccountvkvkvk.dfs.core.windows.net"
+		},
+		"AzureHDInsightLinkedService_properties_typeProperties_userName": {
+			"value": "admin"
+		},
+		"AzureKeyVault1_properties_typeProperties_baseUrl": {
+			"value": "https://dasjfhadjskfhdsakjfhaks.vault.azure.net/"
+		},
+		"HttpServer1_properties_typeProperties_url": {
+			"value": "https://raw.githubusercontent.com/djpmsft/adf-ready-demo/master/moviesDB.csv"
+		},
+		"linkedService2_properties_typeProperties_hostSubscriptionId": {
+			"value": "162c43af-928a-468d-b0f4-20d2f594c2a7"
+		},
+		"linkedService2_properties_typeProperties_clusterResourceGroup": {
+			"value": "dp"
+		},
+		"linkedService2_properties_typeProperties_servicePrincipalId": {
+			"value": "e189cd81-5588-4c58-a639-4178131a25ca"
+		},
+		"linkedService2_properties_typeProperties_tenant": {
+			"value": "f8cdef31-a31e-4b4a-93e4-5f571e91255a"
+		}
+	}
+}

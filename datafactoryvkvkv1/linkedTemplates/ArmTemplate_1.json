@@ -1,0 +1,744 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "datafactoryvkvkv1"
+		},
+		"AzureHDInsightLinkedService_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'AzureHDInsightLinkedService'"
+		},
+		"linkedService2_clusterPassword": {
+			"type": "secureString",
+			"metadata": "Secure string for 'clusterPassword' of 'linkedService2'"
+		},
+		"linkedService2_clusterSshPassword": {
+			"type": "secureString",
+			"metadata": "Secure string for 'clusterSshPassword' of 'linkedService2'"
+		},
+		"linkedService2_servicePrincipalKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'servicePrincipalKey' of 'linkedService2'"
+		},
+		"SinkDataset_properties_typeProperties_fileName": {
+			"type": "string",
+			"defaultValue": "@CONCAT('Incremental-', pipeline().RunId, '.txt')"
+		},
+		"SinkDataset_properties_typeProperties_folderPath": {
+			"type": "string",
+			"defaultValue": "adftutorial/incrementalcopy"
+		},
+		"AzureHDInsightLinkedService_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "admin"
+		},
+		"linkedService2_properties_typeProperties_hostSubscriptionId": {
+			"type": "string",
+			"defaultValue": "162c43af-928a-468d-b0f4-20d2f594c2a7"
+		},
+		"linkedService2_properties_typeProperties_clusterResourceGroup": {
+			"type": "string",
+			"defaultValue": "dp"
+		},
+		"linkedService2_properties_typeProperties_servicePrincipalId": {
+			"type": "string",
+			"defaultValue": "e189cd81-5588-4c58-a639-4178131a25ca"
+		},
+		"linkedService2_properties_typeProperties_tenant": {
+			"type": "string",
+			"defaultValue": "f8cdef31-a31e-4b4a-93e4-5f571e91255a"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/DelimitedText2')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "movie",
+						"type": "String"
+					},
+					{
+						"name": "title",
+						"type": "String"
+					},
+					{
+						"name": "genres",
+						"type": "String"
+					},
+					{
+						"name": "year",
+						"type": "String"
+					},
+					{
+						"name": "Rating",
+						"type": "String"
+					},
+					{
+						"name": "Rotton Tomato",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SinkDataset')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureStorageLinkedService",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureBlob",
+				"typeProperties": {
+					"format": {
+						"type": "TextFormat",
+						"treatEmptyAsNull": true
+					},
+					"fileName": {
+						"value": "[parameters('SinkDataset_properties_typeProperties_fileName')]",
+						"type": "Expression"
+					},
+					"folderPath": "[parameters('SinkDataset_properties_typeProperties_folderPath')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SourceDataset')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSQLDatabaseLinkedService",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"typeProperties": {
+					"tableName": "data_source_table"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/WatermarkDataset')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSQLDatabaseLinkedService",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"typeProperties": {
+					"tableName": "watermarktable"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/http')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "HttpServer1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "HttpServerLocation"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "movie",
+						"type": "String"
+					},
+					{
+						"name": "title",
+						"type": "String"
+					},
+					{
+						"name": "genres",
+						"type": "String"
+					},
+					{
+						"name": "year",
+						"type": "String"
+					},
+					{
+						"name": "Rating",
+						"type": "String"
+					},
+					{
+						"name": "Rotton Tomato",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/httpserver')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "HttpServer1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "HttpServerLocation"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "movie",
+						"type": "String"
+					},
+					{
+						"name": "title",
+						"type": "String"
+					},
+					{
+						"name": "genres",
+						"type": "String"
+					},
+					{
+						"name": "year",
+						"type": "String"
+					},
+					{
+						"name": "Rating",
+						"type": "String"
+					},
+					{
+						"name": "Rotton Tomato",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureHDInsightLinkedService')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "HDInsight",
+				"typeProperties": {
+					"clusterUri": "https://hdinsightcluster.azurehdinsight.net",
+					"userName": "[parameters('AzureHDInsightLinkedService_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('AzureHDInsightLinkedService_password')]"
+					},
+					"isEspEnabled": false,
+					"linkedServiceName": {
+						"referenceName": "Hdinsightadlsg2",
+						"type": "LinkedServiceReference"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/linkedService2')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "HDInsightOnDemand",
+				"typeProperties": {
+					"clusterType": "hadoop",
+					"clusterSize": 1,
+					"timeToLive": "00:15:00",
+					"version": "3.6",
+					"hostSubscriptionId": "[parameters('linkedService2_properties_typeProperties_hostSubscriptionId')]",
+					"clusterResourceGroup": "[parameters('linkedService2_properties_typeProperties_clusterResourceGroup')]",
+					"servicePrincipalId": "[parameters('linkedService2_properties_typeProperties_servicePrincipalId')]",
+					"tenant": "[parameters('linkedService2_properties_typeProperties_tenant')]",
+					"clusterNamePrefix": "",
+					"clusterPassword": {
+						"type": "SecureString",
+						"value": "[parameters('linkedService2_clusterPassword')]"
+					},
+					"clusterSshPassword": {
+						"type": "SecureString",
+						"value": "[parameters('linkedService2_clusterSshPassword')]"
+					},
+					"servicePrincipalKey": {
+						"type": "SecureString",
+						"value": "[parameters('linkedService2_servicePrincipalKey')]"
+					},
+					"additionalLinkedServiceNames": [
+						{
+							"referenceName": "Hdinsightadlsg2",
+							"type": "LinkedServiceReference"
+						}
+					],
+					"hcatalogLinkedServiceName": {
+						"referenceName": "AzureSQLDatabaseLinkedService",
+						"type": "LinkedServiceReference"
+					},
+					"linkedServiceName": {
+						"referenceName": "Hdinsightadlsg2",
+						"type": "LinkedServiceReference"
+					},
+					"headNodeSize": "",
+					"dataNodeSize": "",
+					"zookeeperNodeSize": "",
+					"subnetName": "",
+					"virtualNetworkId": ""
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/IncrementalCopyPipeline')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "LookupOldWaterMarkActivity",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlSource",
+								"sqlReaderQuery": "select * from watermarktable",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "WatermarkDataset",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "LookupNewWaterMarkActivity",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlSource",
+								"sqlReaderQuery": "select MAX(LastModifytime) as NewWatermarkvalue from data_source_table",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "SourceDataset",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "IncrementalCopyActivity",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "LookupNewWaterMarkActivity",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "LookupOldWaterMarkActivity",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlSource",
+								"sqlReaderQuery": {
+									"value": "select * from data_source_table where LastModifytime > '@{activity('LookupOldWaterMarkActivity').output.firstRow.WatermarkValue}' and LastModifytime <= '@{activity('LookupNewWaterMarkActivity').output.firstRow.NewWatermarkvalue}'",
+									"type": "Expression"
+								},
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "BlobSink"
+							},
+							"enableStaging": false
+						},
+						"inputs": [
+							{
+								"referenceName": "SourceDataset",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "SinkDataset",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "StoredProceduretoWriteWatermarkActivity",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "IncrementalCopyActivity",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "usp_write_watermark",
+							"storedProcedureParameters": {
+								"LastModifiedtime": {
+									"value": {
+										"value": "@{activity('LookupNewWaterMarkActivity').output.firstRow.NewWatermarkvalue}",
+										"type": "Expression"
+									},
+									"type": "datetime"
+								},
+								"TableName": {
+									"value": {
+										"value": "@{activity('LookupOldWaterMarkActivity').output.firstRow.TableName}",
+										"type": "Expression"
+									},
+									"type": "String"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureSQLDatabaseLinkedService",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"annotations": [],
+				"lastPublishTime": "2020-12-28T09:16:04Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/WatermarkDataset')]",
+				"[concat(variables('factoryId'), '/datasets/SourceDataset')]",
+				"[concat(variables('factoryId'), '/datasets/SinkDataset')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "HttpReadSettings",
+									"requestMethod": "GET"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "DelimitedText1",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DelimitedText2",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"annotations": [],
+				"lastPublishTime": "2021-03-08T08:11:46Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DelimitedText2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dataflow1')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ADLSG2",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "AzureSynapseAnalyticsTable1",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "Select1"
+						},
+						{
+							"name": "Filter1"
+						},
+						{
+							"name": "DerivedPrimaryGenre"
+						},
+						{
+							"name": "RankMoviesByRating"
+						},
+						{
+							"name": "AggregateRatings"
+						},
+						{
+							"name": "UpsertifTrue"
+						}
+					],
+					"script": "source(output(\n\t\tmovie as string,\n\t\ttitle as string,\n\t\tgenres as string,\n\t\tyear as string,\n\t\tRating as string,\n\t\t{Rotton Tomato} as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 select(mapColumn(\n\t\tmovie,\n\t\ttitle,\n\t\tgenres,\n\t\tyear,\n\t\t{Rotten Tomato} = {Rotton Tomato}\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nSelect1 filter(toInteger(year) > 1950) ~> Filter1\nFilter1 derive(PrimaryGenre = iif(locate('|', genres) > 1, left(genres, locate('|',genres)-1),genres)) ~> DerivedPrimaryGenre\nDerivedPrimaryGenre window(over(PrimaryGenre,\n\t\tyear),\n\tdesc({Rotten Tomato}, true),\n\tRatingsRank = rank()) ~> RankMoviesByRating\nRankMoviesByRating aggregate(groupBy(PrimaryGenre,\n\t\tyear),\n\tAverageRatings = avg(toInteger({Rotten Tomato})),\n\t\tHighestRated = first(title),\n\t\tLowestRated = last(title),\n\t\tNumberOfMovies = count()) ~> AggregateRatings\nAggregateRatings alterRow(upsertIf(true())) ~> UpsertifTrue\nUpsertifTrue sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:false,\n\tupdateable:false,\n\tupsertable:true,\n\tkeys:['PrimaryGenre','year'],\n\tformat: 'table',\n\tstaged: true,\n\tallowCopyCommand: true,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tPrimaryGenre,\n\t\tyear,\n\t\tAverageRatings,\n\t\tHighestRated,\n\t\tLowestRated,\n\t\tNumberOfMovies\n\t)) ~> sink1"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/copypipeline')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "HttpReadSettings",
+									"requestMethod": "GET"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "httpserver",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ADLSG2",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Data flow1",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "Copy data1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "dataflow1",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"sink1": {}
+								}
+							},
+							"staging": {
+								"linkedService": {
+									"referenceName": "AzureDataLakeStorage1",
+									"type": "LinkedServiceReference"
+								},
+								"folderPath": "data/staging"
+							},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"annotations": [],
+				"lastPublishTime": "2021-04-10T07:07:29Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/httpserver')]",
+				"[concat(variables('factoryId'), '/dataflows/dataflow1')]"
+			]
+		}
+	]
+}

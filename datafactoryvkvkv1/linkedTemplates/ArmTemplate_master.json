@@ -1,0 +1,244 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "datafactoryvkvkv1"
+		},
+		"AzureBlobStorage1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage1'"
+		},
+		"AzureBlobStorage2_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage2'"
+		},
+		"AzureDataLakeStorage1_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage1'"
+		},
+		"AzureDatabricks1_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'AzureDatabricks1'"
+		},
+		"AzureDatabricks2_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'AzureDatabricks2'"
+		},
+		"AzureDatabricks3_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'AzureDatabricks3'"
+		},
+		"AzureDatabricks4_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'AzureDatabricks4'"
+		},
+		"AzureHDInsightLinkedService_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'AzureHDInsightLinkedService'"
+		},
+		"AzureSQLDatabaseLinkedService_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSQLDatabaseLinkedService'"
+		},
+		"AzureStorageLinkedService_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureStorageLinkedService'"
+		},
+		"AzureSynapseAnalytics1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSynapseAnalytics1'"
+		},
+		"Hdinsightadlsg2_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'Hdinsightadlsg2'"
+		},
+		"linkedService1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'linkedService1'"
+		},
+		"linkedService2_clusterPassword": {
+			"type": "secureString",
+			"metadata": "Secure string for 'clusterPassword' of 'linkedService2'"
+		},
+		"linkedService2_clusterSshPassword": {
+			"type": "secureString",
+			"metadata": "Secure string for 'clusterSshPassword' of 'linkedService2'"
+		},
+		"linkedService2_servicePrincipalKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'servicePrincipalKey' of 'linkedService2'"
+		},
+		"SinkDataset_properties_typeProperties_fileName": {
+			"type": "string",
+			"defaultValue": "@CONCAT('Incremental-', pipeline().RunId, '.txt')"
+		},
+		"SinkDataset_properties_typeProperties_folderPath": {
+			"type": "string",
+			"defaultValue": "adftutorial/incrementalcopy"
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://storageaccountvkvkvk.dfs.core.windows.net"
+		},
+		"AzureHDInsightLinkedService_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "admin"
+		},
+		"AzureKeyVault1_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://dasjfhadjskfhdsakjfhaks.vault.azure.net/"
+		},
+		"HttpServer1_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://raw.githubusercontent.com/djpmsft/adf-ready-demo/master/moviesDB.csv"
+		},
+		"linkedService2_properties_typeProperties_hostSubscriptionId": {
+			"type": "string",
+			"defaultValue": "162c43af-928a-468d-b0f4-20d2f594c2a7"
+		},
+		"linkedService2_properties_typeProperties_clusterResourceGroup": {
+			"type": "string",
+			"defaultValue": "dp"
+		},
+		"linkedService2_properties_typeProperties_servicePrincipalId": {
+			"type": "string",
+			"defaultValue": "e189cd81-5588-4c58-a639-4178131a25ca"
+		},
+		"linkedService2_properties_typeProperties_tenant": {
+			"type": "string",
+			"defaultValue": "f8cdef31-a31e-4b4a-93e4-5f571e91255a"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "datafactoryvkvkv1_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"AzureBlobStorage1_connectionString": {
+						"value": "[parameters('AzureBlobStorage1_connectionString')]"
+					},
+					"AzureBlobStorage2_connectionString": {
+						"value": "[parameters('AzureBlobStorage2_connectionString')]"
+					},
+					"AzureDataLakeStorage1_accountKey": {
+						"value": "[parameters('AzureDataLakeStorage1_accountKey')]"
+					},
+					"AzureDatabricks1_accessToken": {
+						"value": "[parameters('AzureDatabricks1_accessToken')]"
+					},
+					"AzureDatabricks2_accessToken": {
+						"value": "[parameters('AzureDatabricks2_accessToken')]"
+					},
+					"AzureDatabricks3_accessToken": {
+						"value": "[parameters('AzureDatabricks3_accessToken')]"
+					},
+					"AzureDatabricks4_accessToken": {
+						"value": "[parameters('AzureDatabricks4_accessToken')]"
+					},
+					"AzureSQLDatabaseLinkedService_connectionString": {
+						"value": "[parameters('AzureSQLDatabaseLinkedService_connectionString')]"
+					},
+					"AzureStorageLinkedService_connectionString": {
+						"value": "[parameters('AzureStorageLinkedService_connectionString')]"
+					},
+					"AzureSynapseAnalytics1_connectionString": {
+						"value": "[parameters('AzureSynapseAnalytics1_connectionString')]"
+					},
+					"Hdinsightadlsg2_connectionString": {
+						"value": "[parameters('Hdinsightadlsg2_connectionString')]"
+					},
+					"linkedService1_connectionString": {
+						"value": "[parameters('linkedService1_connectionString')]"
+					},
+					"AzureDataLakeStorage1_properties_typeProperties_url": {
+						"value": "[parameters('AzureDataLakeStorage1_properties_typeProperties_url')]"
+					},
+					"AzureKeyVault1_properties_typeProperties_baseUrl": {
+						"value": "[parameters('AzureKeyVault1_properties_typeProperties_baseUrl')]"
+					},
+					"HttpServer1_properties_typeProperties_url": {
+						"value": "[parameters('HttpServer1_properties_typeProperties_url')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "datafactoryvkvkv1_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"AzureHDInsightLinkedService_password": {
+						"value": "[parameters('AzureHDInsightLinkedService_password')]"
+					},
+					"linkedService2_clusterPassword": {
+						"value": "[parameters('linkedService2_clusterPassword')]"
+					},
+					"linkedService2_clusterSshPassword": {
+						"value": "[parameters('linkedService2_clusterSshPassword')]"
+					},
+					"linkedService2_servicePrincipalKey": {
+						"value": "[parameters('linkedService2_servicePrincipalKey')]"
+					},
+					"SinkDataset_properties_typeProperties_fileName": {
+						"value": "[parameters('SinkDataset_properties_typeProperties_fileName')]"
+					},
+					"SinkDataset_properties_typeProperties_folderPath": {
+						"value": "[parameters('SinkDataset_properties_typeProperties_folderPath')]"
+					},
+					"AzureHDInsightLinkedService_properties_typeProperties_userName": {
+						"value": "[parameters('AzureHDInsightLinkedService_properties_typeProperties_userName')]"
+					},
+					"linkedService2_properties_typeProperties_hostSubscriptionId": {
+						"value": "[parameters('linkedService2_properties_typeProperties_hostSubscriptionId')]"
+					},
+					"linkedService2_properties_typeProperties_clusterResourceGroup": {
+						"value": "[parameters('linkedService2_properties_typeProperties_clusterResourceGroup')]"
+					},
+					"linkedService2_properties_typeProperties_servicePrincipalId": {
+						"value": "[parameters('linkedService2_properties_typeProperties_servicePrincipalId')]"
+					},
+					"linkedService2_properties_typeProperties_tenant": {
+						"value": "[parameters('linkedService2_properties_typeProperties_tenant')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'datafactoryvkvkv1_ArmTemplate_0')]"
+			]
+		}
+	]
+}
