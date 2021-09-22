@@ -1,5 +1,5 @@
 {
-	"name": "DelimitedText1",
+	"name": "adlsg2",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureDataLakeStorage1",
@@ -10,9 +10,8 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "sale-20170501.csv",
-				"folderPath": "sale-poc",
-				"fileSystem": "wwi-02"
+				"folderPath": "files",
+				"fileSystem": "moviescontainer"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
@@ -21,47 +20,27 @@
 		},
 		"schema": [
 			{
-				"name": "TransactionId",
+				"name": "movie",
 				"type": "String"
 			},
 			{
-				"name": "CustomerId",
+				"name": "title",
 				"type": "String"
 			},
 			{
-				"name": "ProductId",
+				"name": "genres",
 				"type": "String"
 			},
 			{
-				"name": "Quantity",
+				"name": "year",
 				"type": "String"
 			},
 			{
-				"name": "Price",
+				"name": "Rating",
 				"type": "String"
 			},
 			{
-				"name": "TotalAmount",
-				"type": "String"
-			},
-			{
-				"name": "TransactionDate",
-				"type": "String"
-			},
-			{
-				"name": "ProfitAmount",
-				"type": "String"
-			},
-			{
-				"name": "Hour",
-				"type": "String"
-			},
-			{
-				"name": "Minute",
-				"type": "String"
-			},
-			{
-				"name": "StoreId",
+				"name": "Rotton Tomato",
 				"type": "String"
 			}
 		]
