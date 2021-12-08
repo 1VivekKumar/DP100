@@ -1,12 +1,16 @@
 {
 	"name": "AzureDataLakeStorage1",
-	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"type": "Microsoft.Synapse/workspaces/linkedservices",
 	"properties": {
 		"annotations": [],
 		"type": "AzureBlobFS",
 		"typeProperties": {
-			"url": "https://asadatalakeca5shy7.dfs.core.windows.net",
-			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIkFERlZLVktWS1ZLVl9hNzUzMzQxZC1mYzVkLTQyMDAtOTUwOC02Y2RmODY0NTFhZjYiDQp9"
+			"url": "https://jdhfakjdhfaadatalake.dfs.core.windows.net",
+			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIlNZTkFQU0VAMURBOTM2QjMtMEEzRS00OTlDLUFDNzUtQ0JGOTJENTU2NTFFXzE5Mzg3MmVmLTBiNDAtNGFkYS05Yzg0LTI1MTFjYjk5Zjg5MiINCn0="
+		},
+		"connectVia": {
+			"referenceName": "AutoResolveIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
 		}
 	}
 }

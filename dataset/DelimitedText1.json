@@ -2,17 +2,14 @@
 	"name": "DelimitedText1",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "AzureDataLakeStorage1",
+			"referenceName": "HttpServer1",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
-				"type": "AzureBlobFSLocation",
-				"fileName": "sale-20170501.csv",
-				"folderPath": "sale-poc",
-				"fileSystem": "wwi-02"
+				"type": "HttpServerLocation"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
@@ -21,50 +18,30 @@
 		},
 		"schema": [
 			{
-				"name": "TransactionId",
+				"name": "movie",
 				"type": "String"
 			},
 			{
-				"name": "CustomerId",
+				"name": "title",
 				"type": "String"
 			},
 			{
-				"name": "ProductId",
+				"name": "genres",
 				"type": "String"
 			},
 			{
-				"name": "Quantity",
+				"name": "year",
 				"type": "String"
 			},
 			{
-				"name": "Price",
+				"name": "Rating",
 				"type": "String"
 			},
 			{
-				"name": "TotalAmount",
-				"type": "String"
-			},
-			{
-				"name": "TransactionDate",
-				"type": "String"
-			},
-			{
-				"name": "ProfitAmount",
-				"type": "String"
-			},
-			{
-				"name": "Hour",
-				"type": "String"
-			},
-			{
-				"name": "Minute",
-				"type": "String"
-			},
-			{
-				"name": "StoreId",
+				"name": "Rotton Tomato",
 				"type": "String"
 			}
 		]
 	},
-	"type": "Microsoft.DataFactory/factories/datasets"
+	"type": "Microsoft.Synapse/workspaces/datasets"
 }

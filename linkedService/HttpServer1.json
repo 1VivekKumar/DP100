@@ -1,6 +1,6 @@
 {
 	"name": "HttpServer1",
-	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"type": "Microsoft.Synapse/workspaces/linkedservices",
 	"properties": {
 		"annotations": [],
 		"type": "HttpServer",
@@ -8,6 +8,10 @@
 			"url": "https://raw.githubusercontent.com/djpmsft/adf-ready-demo/master/moviesDB.csv",
 			"enableServerCertificateValidation": true,
 			"authenticationType": "Anonymous"
+		},
+		"connectVia": {
+			"referenceName": "AutoResolveIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
 		}
 	}
 }
